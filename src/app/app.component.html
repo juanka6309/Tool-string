@@ -1,0 +1,89 @@
+<router-outlet></router-outlet>
+
+<h2>Drag / drop the SVG</h2>
+<div class="wrapper-drag">
+  <div class="content-first">
+    <h3>list of equipments</h3>
+    <div
+      class="container-list"
+      [sortablejs]="listEquipments"
+      [sortablejsOptions]="options"
+    >
+      <div
+        class="container-list-element handle"
+        *ngFor="let item of listEquipments"
+
+      >
+        {{ item.description }}
+   
+      </div>
+    </div>
+
+    <h3>list of equipments secondary</h3>
+    <div
+      class="container-list"
+      [sortablejs]="listEquipments"
+      [sortablejsOptions]="options2"
+    >
+      <div class="container-list-element" *ngFor="let item of listEquipments">
+        {{ item.description }}
+      </div>
+    </div>
+  </div>
+
+  <div class="content-second" *ngIf="listImagesEquipments">
+    <h3>list of images</h3>
+    <div
+      class="container-images"
+      [sortablejs]="listImagesEquipments"
+      [sortablejsOptions]="options"
+    >
+      <div
+        class="container-images-element"
+        *ngFor="let item of listImagesEquipments"
+      >
+        <button
+          class="handle container-images-move"
+          (mousedown)="stopPropagation(item)"
+          (touchstart)="stopPropagation(item)"
+        >
+          <svg>
+            <use [attr.xlink:href]="'assets/svg/icons.svg#svg-move'" />
+          </svg>
+        </button>
+        <div #boundaryHTMLElement class="example-boundary">
+          <svg>
+            <use
+              [attr.xlink:href]="'assets/svg/icons.svg#' + item.svgName"
+            ></use>
+          </svg>
+
+          <div
+            class="example-box piece"
+            [cdkDragBoundary]="boundaryHTMLElement"
+            cdkDrag
+            cdkDropList
+            [cdkDragFreeDragPosition]="{ x: item3.x, y: item3.y }"
+            (cdkDragStarted)="onDragStarted($event)"
+            (cdkDragDropped)="cdkDragDropped($event)"
+            (cdkDropListDropped)="cdkDropListDropped($event)"
+            (cdkDragEnded)="cdkDragEnded($event, item,item3.id)"
+            *ngFor="let item3 of item.elements"
+          >
+            <svg class="icon">
+              <use
+                [attr.xlink:href]="'assets/svg/icons.svg#' + item3.svgName"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="container-images"
+          style="width: 20px"
+          [sortablejs]="item.elements"
+          [sortablejsOptions]="options2"
+        ></div>
+      </div>
+    </div>
+  </div>
+</div>
